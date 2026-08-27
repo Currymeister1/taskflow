@@ -2,7 +2,9 @@ package com.curry.taskflow.service.impl
 
 import com.curry.taskflow.api.dto.Task
 import com.curry.taskflow.service.TaskService
+import org.springframework.stereotype.Service
 
+@Service
 class TaskServiceImpl : TaskService {
     override fun getTasks(): List<Task> {
         TODO("Not yet implemented")

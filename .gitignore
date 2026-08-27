@@ -38,3 +38,6 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### scripts ###
+run.sh

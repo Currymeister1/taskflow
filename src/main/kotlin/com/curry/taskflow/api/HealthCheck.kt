@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @SpringBootApplication
-@RequestMapping("${ApiConstants.ROOT_PATH}/${ApiConstants.API_VERSION}")
+@RequestMapping("${ApiConstants.ROOT_PATH}${ApiConstants.API_VERSION}")
 class HealthCheck {
 
     @GetMapping("/health")
