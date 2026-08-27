@@ -13,7 +13,7 @@ data class CreateTaskRequest(
 )
 
 data class GetTaskResponse(
-    val id: Long,
+    val id: Long? = null,
     val title: String,
     val description: String? = null,
     val status: TaskStatus = TaskStatus.TO_DO,
