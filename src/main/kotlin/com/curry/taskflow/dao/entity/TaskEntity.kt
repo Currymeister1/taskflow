@@ -27,6 +27,6 @@ class TaskEntity(
     @Column(nullable = false)
     var priority: Int,
 
-    @Column(name = "created_at", nullable = false)
-    var createdAt: LocalDate,
+    @Column(name = "created_at", nullable = true)
+    var createdAt: LocalDate? = null,
 )
