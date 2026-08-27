@@ -22,7 +22,7 @@ class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService 
     }
 
     override fun delete(taskId: Long) {
-        TODO("Not yet implemented")
+        taskRepository.deleteById(taskId)
     }
 
     override fun getTaskById(taskId: Long): GetTaskResponse? = taskRepository
