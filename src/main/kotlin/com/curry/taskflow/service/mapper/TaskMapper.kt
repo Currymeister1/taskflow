@@ -23,6 +23,6 @@ fun CreateTaskRequest.toTaskEntity(): TaskEntity {
         title = title,
         description = description,
         status = status.value,
-        priority = priority.value
+        priority = priority.value,
     )
 }

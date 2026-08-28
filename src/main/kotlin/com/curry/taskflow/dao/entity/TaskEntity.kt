@@ -10,12 +10,7 @@ import java.time.LocalDate
 
 @Entity
 @Table(name = "tasks")
-class TaskEntity(
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-
+class TaskEntity (
     @Column(nullable = false)
     var title: String,
 
@@ -26,7 +21,4 @@ class TaskEntity(
 
     @Column(nullable = false)
     var priority: Int,
-
-    @Column(name = "created_at", nullable = true)
-    var createdAt: LocalDate? = null,
-)
+) : DateAudit()

@@ -15,21 +15,16 @@ class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService 
         .findAll()
         .map { task -> task.toCreateOrGetTaskResponse() }
 
-    override fun create(createTaskRequest: CreateTaskRequest): CreateOrGetTaskResponse {
-        val taskEntity = createTaskRequest.toTaskEntity()
-
-        taskRepository.save(taskEntity)
-
-        return taskEntity.toCreateOrGetTaskResponse()
-    }
+    override fun create(createTaskRequest: CreateTaskRequest): CreateOrGetTaskResponse =
+       taskRepository
+           .save(createTaskRequest.toTaskEntity())
+           .toCreateOrGetTaskResponse()
 
     override fun update(taskId: Long): Task {
         TODO("Not yet implemented")
     }
 
-    override fun delete(taskId: Long) {
-        taskRepository.deleteById(taskId)
-    }
+    override fun delete(taskId: Long) = taskRepository.deleteById(taskId)
 
     override fun getTaskById(taskId: Long): CreateOrGetTaskResponse? = taskRepository
         .findById(taskId)
