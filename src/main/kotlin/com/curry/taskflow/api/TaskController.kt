@@ -2,8 +2,10 @@ package com.curry.taskflow.api
 
 import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
 import com.curry.taskflow.api.dto.TaskResponse
+import com.curry.taskflow.api.enums.TaskPriority
 import com.curry.taskflow.api.enums.TaskStatus
 import com.curry.taskflow.service.TaskService
+import com.curry.taskflow.service.modal.TaskFilterPredicate
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,9 +25,21 @@ import org.springframework.web.bind.annotation.RestController
 class TaskController(private val taskService: TaskService) {
 
     @GetMapping
-    fun getTasks(@RequestParam("status", required = false) taskStatus: TaskStatus?):
+    fun getTasks(
+        @RequestParam("status", required = false) taskStatus: TaskStatus?,
+        @RequestParam("taskPriority", required = false) taskPriority: TaskPriority?,
+        @RequestParam("q", required = false) textSearch: String?,
+    ):
             ResponseEntity<List<TaskResponse>> =
-        ResponseEntity.ok(taskService.getTasks(taskStatus))
+        ResponseEntity.ok(
+            taskService.getTasks(
+                TaskFilterPredicate(
+                    taskStatus,
+                    taskPriority,
+                    textSearch
+                ),
+            )
+        )
 
 
     @GetMapping("/{id}")
