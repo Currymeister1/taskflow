@@ -13,10 +13,17 @@ import org.springframework.stereotype.Service
 
 @Service
 class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService {
-    override fun getTasks(taskStatus: TaskStatus?): List<TaskResponse> = taskRepository
-        .findAll()
-        .map { task -> task.toTaskResponse() }
-        .filter { task -> task.status == taskStatus }
+    override fun getTasks(taskStatus: TaskStatus?): List<TaskResponse> {
+        val predicates: List<(TaskEntity) -> Boolean> = listOfNotNull(
+            taskStatus?.let { s -> { task: TaskEntity -> task.status == s.value } },
+          //  priority?.let { p -> { task: TaskEntity -> task.priority == p } },
+        )
+
+        return taskRepository
+            .findAll()
+            .filter { task -> predicates.all {p -> p(task)} }
+            .map { task -> task.toTaskResponse() }
+    }
 
     override fun create(createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): TaskResponse =
         taskRepository
