@@ -1,5 +1,6 @@
 package com.curry.taskflow.api.exception.mapper
 
+import com.curry.taskflow.api.exception.InvalidTaskPriorityException
 import com.curry.taskflow.api.exception.InvalidTaskStatusException
 import com.curry.taskflow.api.exception.TaskNotFoundException
 import org.springframework.http.HttpStatus
@@ -29,6 +30,26 @@ class TaskExceptionMapper {
         ),
         HttpStatus.BAD_REQUEST
     )
+
+    @ExceptionHandler(InvalidTaskPriorityException::class)
+    fun handleInvalidTaskPriorityException(ex: InvalidTaskPriorityException):
+            ResponseEntity<ErrorMessageModel> = ResponseEntity(
+        ErrorMessageModel(
+            status = HttpStatus.BAD_REQUEST.value(),
+            message = ex.message
+        ),
+        HttpStatus.BAD_REQUEST
+    )
+
+    @ExceptionHandler(RuntimeException::class)
+    fun handleRunTimeException(ex: RuntimeException):
+            ResponseEntity<ErrorMessageModel> = ResponseEntity(
+        ErrorMessageModel(
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            message = "Something went wrong!",
+        ), HttpStatus.INTERNAL_SERVER_ERROR
+    )
+        .also { ex.printStackTrace() }
 }
 
 class ErrorMessageModel(

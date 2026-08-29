@@ -17,7 +17,7 @@ enum class TaskStatus(val value: Int) {
 
     companion object {
         fun fromValue(value: Int): TaskStatus = entries.find { it.value == value }
-            ?: throw IllegalArgumentException("TaskStatus with value $value not found")
+            ?: throw InvalidTaskStatusException("TaskStatus with value $value not found")
 
         @JsonCreator
         fun fromText(text: String): TaskStatus = entries.find { it.name.equals(text, ignoreCase = true) }

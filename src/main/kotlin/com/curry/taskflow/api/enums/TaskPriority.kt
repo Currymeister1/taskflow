@@ -1,5 +1,7 @@
 package com.curry.taskflow.api.enums
 
+import com.curry.taskflow.api.exception.InvalidTaskPriorityException
+
 enum class TaskPriority(val value: Int) {
     LOW(0),
     MEDIUM(1),
@@ -9,6 +11,10 @@ enum class TaskPriority(val value: Int) {
 
     companion object {
         fun fromValue(value: Int): TaskPriority =
-            values().first { it.value == value } ?: throw IllegalArgumentException("TaskPriority $value not found")
+            entries.find { it.value == value } ?: throw IllegalArgumentException("TaskPriority $value not found")
+
+        fun fromText(text: String): TaskPriority =
+            entries.find { it.name.compareTo(text, true) == 0 } ?:
+            throw InvalidTaskPriorityException("TaskPriority $text not found")
     }
 }
