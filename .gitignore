@@ -41,3 +41,6 @@ out/
 
 ### scripts ###
 run.sh
+
+### misc ###
+progressTracker.txt

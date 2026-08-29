@@ -2,6 +2,7 @@ package com.curry.taskflow.service.impl
 
 import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
 import com.curry.taskflow.api.dto.TaskResponse
+import com.curry.taskflow.api.enums.TaskStatus
 import com.curry.taskflow.api.exception.TaskNotFoundException
 import com.curry.taskflow.dao.entity.TaskEntity
 import com.curry.taskflow.dao.repo.TaskRepository
@@ -12,9 +13,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService {
-    override fun getTasks(): List<TaskResponse> = taskRepository
+    override fun getTasks(taskStatus: TaskStatus?): List<TaskResponse> = taskRepository
         .findAll()
         .map { task -> task.toTaskResponse() }
+        .filter { task -> task.status == taskStatus }
 
     override fun create(createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): TaskResponse =
         taskRepository
