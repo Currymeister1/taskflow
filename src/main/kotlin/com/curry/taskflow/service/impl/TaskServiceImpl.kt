@@ -2,6 +2,7 @@ package com.curry.taskflow.service.impl
 
 import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
 import com.curry.taskflow.api.dto.TaskResponse
+import com.curry.taskflow.api.exception.TaskNotFoundException
 import com.curry.taskflow.dao.entity.TaskEntity
 import com.curry.taskflow.dao.repo.TaskRepository
 import com.curry.taskflow.service.TaskService
@@ -22,7 +23,7 @@ class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService 
 
     override fun update(taskId: Long, createOrUpdateTaskRequest: CreateOrUpdateTaskRequest, ): TaskResponse {
         val task = fetchTaskById(taskId)
-            ?: throw IllegalArgumentException("Task not found")
+            ?: throw TaskNotFoundException("Task with id $taskId not found")
 
         task.title = createOrUpdateTaskRequest.title
         task.description = createOrUpdateTaskRequest.description
@@ -34,7 +35,7 @@ class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService 
 
     override fun delete(taskId: Long) = taskRepository.deleteById(taskId)
 
-    override fun getTaskById(taskId: Long): TaskResponse? = fetchTaskById(taskId)?.toTaskResponse()
+    override fun getTaskById(taskId: Long): TaskResponse = fetchTaskById(taskId) ?. toTaskResponse() ?: throw TaskNotFoundException("Task with id $taskId not found")
 
     private fun fetchTaskById(taskId: Long): TaskEntity? = taskRepository.findById(taskId).orElse(null)
 }

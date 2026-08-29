@@ -22,8 +22,8 @@ class TaskExceptionMapper {
 }
 
 class ErrorMessageModel(
-    var status: Int? = null,
-    var message: String? = null,
+    val status: Int? = null,
+    val message: String? = null,
 )
 
 

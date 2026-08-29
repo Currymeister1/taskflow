@@ -25,19 +25,7 @@ class TaskController(private val taskService: TaskService) {
 
 
     @GetMapping("/{id}")
-    fun getTaskById(@PathVariable id: Long): ResponseEntity<Any> =
-        taskService
-            .getTaskById(id)
-            ?.let { ResponseEntity.ok(it) }
-            ?: ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(
-                    mapOf(
-                        "status" to "404",
-                        "message" to "Task with id $id not found."
-                    )
-                )
-
+    fun getTaskById(@PathVariable id: Long): ResponseEntity<Any> = ResponseEntity.ok(taskService.getTaskById(id))
 
     @PostMapping
     fun createTask(@RequestBody createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): ResponseEntity<TaskResponse> =

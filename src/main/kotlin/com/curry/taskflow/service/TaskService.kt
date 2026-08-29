@@ -8,5 +8,5 @@ interface TaskService {
     fun create(createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): TaskResponse
     fun update(taskId: Long, createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): TaskResponse
     fun delete(taskId: Long)
-    fun getTaskById(taskId: Long): TaskResponse?
+    fun getTaskById(taskId: Long): TaskResponse
 }
