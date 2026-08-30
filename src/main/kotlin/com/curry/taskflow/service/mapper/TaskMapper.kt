@@ -5,6 +5,7 @@ import com.curry.taskflow.api.dto.TaskResponse
 import com.curry.taskflow.api.enums.TaskPriority
 import com.curry.taskflow.api.enums.TaskStatus
 import com.curry.taskflow.dao.entity.TaskEntity
+import com.curry.taskflow.service.util.normalizeTags
 
 fun TaskEntity.toTaskResponse(): TaskResponse {
     return TaskResponse(
@@ -14,6 +15,7 @@ fun TaskEntity.toTaskResponse(): TaskResponse {
         status = TaskStatus.fromValue(status),
         priority = TaskPriority.fromValue(priority),
         createdAt = createdAt,
+        tags = tags,
     )
 }
 
@@ -23,5 +25,6 @@ fun CreateOrUpdateTaskRequest.toTaskEntity(): TaskEntity {
         description = description,
         status = status.value,
         priority = priority.value,
+        tags = tags?.normalizeTags() ?: emptySet(),
     )
 }

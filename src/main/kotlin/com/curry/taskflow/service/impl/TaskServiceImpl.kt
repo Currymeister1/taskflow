@@ -8,13 +8,14 @@ import com.curry.taskflow.dao.repo.TaskRepository
 import com.curry.taskflow.service.TaskService
 import com.curry.taskflow.service.mapper.toTaskEntity
 import com.curry.taskflow.service.mapper.toTaskResponse
-import com.curry.taskflow.service.modal.TaskFilterPredicate
+import com.curry.taskflow.service.modal.TaskFilter
+import com.curry.taskflow.service.util.normalizeTags
 import org.springframework.stereotype.Service
 
 @Service
 class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService {
-    override fun getTasks(taskFilterPredicate: TaskFilterPredicate): List<TaskResponse> {
-        val predicates = getPredicates(taskFilterPredicate)
+    override fun getTasks(taskFilter: TaskFilter): List<TaskResponse> {
+        val predicates = getPredicates(taskFilter)
 
         return taskRepository
             .findAll()
@@ -46,19 +47,26 @@ class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService 
 
     private fun fetchTaskById(taskId: Long): TaskEntity? = taskRepository.findById(taskId).orElse(null)
 
-    private fun getPredicates(taskFilterPredicate: TaskFilterPredicate): List<(TaskEntity) -> Boolean> =
+    private fun getPredicates(taskFilter: TaskFilter): List<(TaskEntity) -> Boolean> =
         listOfNotNull(
-            taskFilterPredicate.taskStatus?.let { s -> { task: TaskEntity -> task.status == s.value } },
-            taskFilterPredicate.taskPriority?.let { p -> { task: TaskEntity -> task.priority == p.value } },
-            taskFilterPredicate.textSearch?.let { ts ->
+            taskFilter.taskStatus?.let { s -> { task: TaskEntity -> task.status == s.value } },
+            taskFilter.taskPriority?.let { p -> { task: TaskEntity -> task.priority == p.value } },
+            taskFilter.textSearch?.let { ts ->
                 { task: TaskEntity ->
                     task.matchQuery(ts)
                 }
             },
+            taskFilter.taskTags?.let { tags ->
+                val normalizedRequestTags = tags.normalizeTags()
+                return@let { task: TaskEntity ->
+                    normalizedRequestTags.isEmpty() ||
+                            task.tags.normalizeTags().intersect(normalizedRequestTags).isNotEmpty()
+                }
+            }
         )
 
     private fun TaskEntity.matchQuery(s1: String): Boolean =
         this.title.containIgnoreCase(s1) || this.description.containIgnoreCase(s1)
-    
+
     private fun String?.containIgnoreCase(s1: String) = this?.contains(s1, ignoreCase = true) ?: false
 }

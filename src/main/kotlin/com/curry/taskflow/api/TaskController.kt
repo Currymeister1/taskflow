@@ -5,7 +5,7 @@ import com.curry.taskflow.api.dto.TaskResponse
 import com.curry.taskflow.api.enums.TaskPriority
 import com.curry.taskflow.api.enums.TaskStatus
 import com.curry.taskflow.service.TaskService
-import com.curry.taskflow.service.modal.TaskFilterPredicate
+import com.curry.taskflow.service.modal.TaskFilter
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -29,14 +29,16 @@ class TaskController(private val taskService: TaskService) {
         @RequestParam("status", required = false) taskStatus: TaskStatus?,
         @RequestParam("taskPriority", required = false) taskPriority: TaskPriority?,
         @RequestParam("q", required = false) textSearch: String?,
+        @RequestParam("tags", required = false) tags: Set<String>?,
     ):
             ResponseEntity<List<TaskResponse>> =
         ResponseEntity.ok(
             taskService.getTasks(
-                TaskFilterPredicate(
-                    taskStatus,
-                    taskPriority,
-                    textSearch
+                TaskFilter(
+                    taskStatus = taskStatus,
+                    taskPriority = taskPriority,
+                    textSearch = textSearch,
+                    taskTags = tags,
                 ),
             )
         )
