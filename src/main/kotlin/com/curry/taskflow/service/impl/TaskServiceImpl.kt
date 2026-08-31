@@ -18,22 +18,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService {
-
-    private val m: Map<SortTaskBy, Comparator<TaskEntity>> = mapOf(
-        SortTaskBy.CREATED_AT to compareBy { it.createdAt },
-    )
-
     override fun getTasks(taskFilter: TaskFilter): List<TaskResponse> {
         val predicates = getPredicates(taskFilter)
-
-        val comparator = taskFilter.sortTaskBy.comparator.let {
-            if (taskFilter.sortTaskOrder == SortTaskOrder.DESC) it.reversed() else it
-        }
 
         return taskRepository
             .findAll()
             .filter { task -> predicates.all { p -> p(task) } }
-            .sortedWith(comparator)
+            .sortedWith(taskFilter.sortTaskBy.comparator)
+            .let { taskFilter.sortTaskOrder.order(it) }
             .map { task -> task.toTaskResponse() }
     }
 
