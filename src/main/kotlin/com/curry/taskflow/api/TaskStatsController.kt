@@ -1,5 +1,6 @@
 package com.curry.taskflow.api
 
+import com.curry.taskflow.api.dto.TaskWorkloadStatResponse
 import com.curry.taskflow.service.TaskStatsService
 import com.curry.taskflow.service.domain.enums.TaskStatus
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -16,5 +17,9 @@ class TaskStatsController(private val taskStatsService: TaskStatsService) {
     @GetMapping("/by-status")
     fun getTasksStatusStats(): ResponseEntity<Map<TaskStatus, Int>> =
         ResponseEntity.ok(taskStatsService.getTaskStatusStats())
+
+    @GetMapping("/workload")
+    fun getTasksWorkflow(): ResponseEntity<TaskWorkloadStatResponse> =
+        ResponseEntity.ok(taskStatsService.getTaskWorkload())
 
 }
