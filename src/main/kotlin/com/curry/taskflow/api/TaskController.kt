@@ -7,6 +7,8 @@ import com.curry.taskflow.service.domain.enums.TaskStatus
 import com.curry.taskflow.service.TaskService
 import com.curry.taskflow.service.domain.TaskFilter
 import com.curry.taskflow.service.domain.TaskResult
+import com.curry.taskflow.service.domain.enums.SortTaskBy
+import com.curry.taskflow.service.domain.enums.SortTaskOrder
 import com.curry.taskflow.service.domain.enums.TaskError
 import jakarta.validation.Valid
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -33,6 +35,8 @@ class TaskController(private val taskService: TaskService) {
         @RequestParam("taskPriority", required = false) taskPriority: TaskPriority?,
         @RequestParam("q", required = false) textSearch: String?,
         @RequestParam("tags", required = false) tags: Set<String>?,
+        @RequestParam("sortBy", defaultValue = "CREATED_AT") sortBy: SortTaskBy,
+        @RequestParam("direction", defaultValue = "DESC") direction: SortTaskOrder,
     ):
             ResponseEntity<List<TaskResponse>> =
         ResponseEntity.ok(
@@ -42,6 +46,8 @@ class TaskController(private val taskService: TaskService) {
                     taskPriority = taskPriority,
                     textSearch = textSearch,
                     taskTags = tags,
+                    sortTaskBy = sortBy,
+                    sortTaskOrder = direction,
                 ),
             )
         )

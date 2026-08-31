@@ -10,6 +10,8 @@ import com.curry.taskflow.service.mapper.toTaskEntity
 import com.curry.taskflow.service.mapper.toTaskResponse
 import com.curry.taskflow.service.domain.TaskFilter
 import com.curry.taskflow.service.domain.TaskResult
+import com.curry.taskflow.service.domain.enums.SortTaskBy
+import com.curry.taskflow.service.domain.enums.SortTaskOrder
 import com.curry.taskflow.service.domain.enums.TaskError
 import com.curry.taskflow.service.util.normalizeTags
 import org.springframework.stereotype.Service
@@ -17,12 +19,21 @@ import org.springframework.stereotype.Service
 @Service
 class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService {
 
+    private val m: Map<SortTaskBy, Comparator<TaskEntity>> = mapOf(
+        SortTaskBy.CREATED_AT to compareBy { it.createdAt },
+    )
+
     override fun getTasks(taskFilter: TaskFilter): List<TaskResponse> {
         val predicates = getPredicates(taskFilter)
 
-       return taskRepository
+        val comparator = taskFilter.sortTaskBy.comparator.let {
+            if (taskFilter.sortTaskOrder == SortTaskOrder.DESC) it.reversed() else it
+        }
+
+        return taskRepository
             .findAll()
             .filter { task -> predicates.all { p -> p(task) } }
+            .sortedWith(comparator)
             .map { task -> task.toTaskResponse() }
     }
 
@@ -44,7 +55,8 @@ class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService 
     override fun delete(taskId: Long) = taskRepository.deleteById(taskId)
 
     override fun getTaskById(taskId: Long): TaskResult =
-        fetchTaskById(taskId)?.let { taskEntity -> TaskResult.Success(taskEntity.toTaskResponse()) } ?: TaskResult.Failure(TaskError.NOT_FOUND)
+        fetchTaskById(taskId)?.let { taskEntity -> TaskResult.Success(taskEntity.toTaskResponse()) }
+            ?: TaskResult.Failure(TaskError.NOT_FOUND)
 
     private fun fetchTaskById(taskId: Long): TaskEntity? = taskRepository.findById(taskId).orElse(null)
 
