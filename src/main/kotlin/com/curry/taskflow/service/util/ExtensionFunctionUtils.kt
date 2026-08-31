@@ -1,7 +1,7 @@
 package com.curry.taskflow.service.util
 
-import com.curry.taskflow.service.domain.enums.TaskStatus
 import com.curry.taskflow.dao.entity.TaskEntity
+import com.curry.taskflow.service.domain.enums.TaskStatus
 import java.time.LocalDate
 
 fun Set<String>.normalizeTags(): Set<String> = this.map { it.trim().lowercase() }.filter { it.isNotBlank() }.toSet()
