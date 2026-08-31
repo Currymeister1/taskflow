@@ -6,6 +6,8 @@ import com.curry.taskflow.service.domain.enums.TaskPriority
 import com.curry.taskflow.service.domain.enums.TaskStatus
 import com.curry.taskflow.service.TaskService
 import com.curry.taskflow.service.domain.TaskFilter
+import com.curry.taskflow.service.domain.TaskResult
+import com.curry.taskflow.service.domain.enums.TaskError
 import jakarta.validation.Valid
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.http.HttpStatus
@@ -46,7 +48,14 @@ class TaskController(private val taskService: TaskService) {
 
 
     @GetMapping("/{id}")
-    fun getTaskById(@PathVariable id: Long): ResponseEntity<Any> = ResponseEntity.ok(taskService.getTaskById(id))
+    fun getTaskById(@PathVariable id: Long): ResponseEntity<TaskResponse> =
+        when(val taskResult = taskService.getTaskById(id)) {
+            is TaskResult.Success -> ResponseEntity.ok(taskResult.taskResponse)
+            is TaskResult.Failure -> when(taskResult.reason) {
+                TaskError.NOT_FOUND -> ResponseEntity.notFound().build()
+                else -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+            }
+        }
 
     @PostMapping
     fun createTask(@RequestBody @Valid createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): ResponseEntity<TaskResponse> =
@@ -57,7 +66,13 @@ class TaskController(private val taskService: TaskService) {
         @PathVariable("id") id: Long,
         @RequestBody @Valid updateTaskRequest: CreateOrUpdateTaskRequest,
     ): ResponseEntity<TaskResponse> =
-        ResponseEntity.status(HttpStatus.OK).body(taskService.update(id, updateTaskRequest))
+        when (val taskResult = taskService.update(id, updateTaskRequest)) {
+            is TaskResult.Success -> ResponseEntity.ok(taskResult.taskResponse)
+            is TaskResult.Failure -> when (taskResult.reason) {
+                TaskError.NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+                else -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+            }
+        }
 
     @DeleteMapping("/{id}")
     fun deleteTask(@PathVariable("id") id: Long): ResponseEntity<Any> {
