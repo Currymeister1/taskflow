@@ -5,6 +5,7 @@ import com.curry.taskflow.api.exception.InvalidTaskStatusException
 import com.curry.taskflow.api.exception.TaskNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
@@ -50,11 +51,25 @@ class TaskExceptionMapper {
         ), HttpStatus.INTERNAL_SERVER_ERROR
     )
         .also { ex.printStackTrace() }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException):
+            ResponseEntity<ErrorMessageModel> = ResponseEntity(
+        ErrorMessageModel(
+            status = HttpStatus.BAD_REQUEST.value(),
+            message = "Validation Failed",
+            errors = ex.bindingResult.fieldErrors
+                .associate {
+                    it.field to (it.defaultMessage ?: "Invalid value")
+                }
+        ), HttpStatus.BAD_REQUEST
+    )
 }
 
 class ErrorMessageModel(
     val status: Int? = null,
     val message: String? = null,
+    val errors: Map<String, String>? = null,
 )
 
 

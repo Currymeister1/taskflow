@@ -1,7 +1,7 @@
-package com.curry.taskflow.service.modal
+package com.curry.taskflow.service.domain
 
-import com.curry.taskflow.api.enums.TaskPriority
-import com.curry.taskflow.api.enums.TaskStatus
+import com.curry.taskflow.service.domain.enums.TaskPriority
+import com.curry.taskflow.service.domain.enums.TaskStatus
 
 data class TaskFilter(
     val taskStatus: TaskStatus? = null,

@@ -2,10 +2,11 @@ package com.curry.taskflow.api
 
 import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
 import com.curry.taskflow.api.dto.TaskResponse
-import com.curry.taskflow.api.enums.TaskPriority
-import com.curry.taskflow.api.enums.TaskStatus
+import com.curry.taskflow.service.domain.enums.TaskPriority
+import com.curry.taskflow.service.domain.enums.TaskStatus
 import com.curry.taskflow.service.TaskService
-import com.curry.taskflow.service.modal.TaskFilter
+import com.curry.taskflow.service.domain.TaskFilter
+import jakarta.validation.Valid
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -48,13 +49,13 @@ class TaskController(private val taskService: TaskService) {
     fun getTaskById(@PathVariable id: Long): ResponseEntity<Any> = ResponseEntity.ok(taskService.getTaskById(id))
 
     @PostMapping
-    fun createTask(@RequestBody createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): ResponseEntity<TaskResponse> =
+    fun createTask(@RequestBody @Valid createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): ResponseEntity<TaskResponse> =
         ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(createOrUpdateTaskRequest))
 
     @PatchMapping("/{id}")
     fun updateTask(
         @PathVariable("id") id: Long,
-        @RequestBody updateTaskRequest: CreateOrUpdateTaskRequest,
+        @RequestBody @Valid updateTaskRequest: CreateOrUpdateTaskRequest,
     ): ResponseEntity<TaskResponse> =
         ResponseEntity.status(HttpStatus.OK).body(taskService.update(id, updateTaskRequest))
 

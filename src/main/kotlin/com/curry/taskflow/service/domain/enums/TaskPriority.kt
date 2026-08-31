@@ -1,4 +1,4 @@
-package com.curry.taskflow.api.enums
+package com.curry.taskflow.service.domain.enums
 
 import com.curry.taskflow.api.exception.InvalidTaskPriorityException
 

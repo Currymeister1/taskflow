@@ -29,4 +29,7 @@ class TaskEntity (
     @CollectionTable(name = "task_tags", joinColumns = [JoinColumn(name = "task_id")])
     @Column(name = "tag")
     var tags: Set<String> = mutableSetOf(),
+
+    @Column(nullable = true)
+    var dueDate: LocalDate? = null,
 ) : DateAudit()

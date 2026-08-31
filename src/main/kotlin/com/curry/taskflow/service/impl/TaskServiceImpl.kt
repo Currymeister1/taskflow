@@ -8,7 +8,7 @@ import com.curry.taskflow.dao.repo.TaskRepository
 import com.curry.taskflow.service.TaskService
 import com.curry.taskflow.service.mapper.toTaskEntity
 import com.curry.taskflow.service.mapper.toTaskResponse
-import com.curry.taskflow.service.modal.TaskFilter
+import com.curry.taskflow.service.domain.TaskFilter
 import com.curry.taskflow.service.util.normalizeTags
 import org.springframework.stereotype.Service
 

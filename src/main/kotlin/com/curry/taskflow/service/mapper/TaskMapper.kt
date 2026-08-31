@@ -2,8 +2,8 @@ package com.curry.taskflow.service.mapper
 
 import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
 import com.curry.taskflow.api.dto.TaskResponse
-import com.curry.taskflow.api.enums.TaskPriority
-import com.curry.taskflow.api.enums.TaskStatus
+import com.curry.taskflow.service.domain.enums.TaskPriority
+import com.curry.taskflow.service.domain.enums.TaskStatus
 import com.curry.taskflow.dao.entity.TaskEntity
 import com.curry.taskflow.service.util.normalizeTags
 

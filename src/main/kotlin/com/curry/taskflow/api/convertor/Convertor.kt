@@ -1,7 +1,7 @@
 package com.curry.taskflow.api.convertor
 
-import com.curry.taskflow.api.enums.TaskPriority
-import com.curry.taskflow.api.enums.TaskStatus
+import com.curry.taskflow.service.domain.enums.TaskPriority
+import com.curry.taskflow.service.domain.enums.TaskStatus
 import org.springframework.core.convert.converter.Converter
 import org.springframework.stereotype.Component
 

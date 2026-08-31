@@ -2,7 +2,7 @@ package com.curry.taskflow.service
 
 import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
 import com.curry.taskflow.api.dto.TaskResponse
-import com.curry.taskflow.service.modal.TaskFilter
+import com.curry.taskflow.service.domain.TaskFilter
 
 interface TaskService {
     fun getTasks(taskFilter: TaskFilter): List<TaskResponse>

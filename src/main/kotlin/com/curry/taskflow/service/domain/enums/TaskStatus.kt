@@ -1,16 +1,16 @@
-package com.curry.taskflow.api.enums
+package com.curry.taskflow.service.domain.enums
 
 import com.curry.taskflow.api.exception.InvalidTaskStatusException
 import com.fasterxml.jackson.annotation.JsonCreator
 
 enum class TaskStatus(val value: Int) {
     TO_DO(0),
-    PROGRESS(1),
-    DONE(2);
+    IN_PROGRESS(1),
+    DONE(2),;
 
     fun next(): TaskStatus? = when (this) {
-        TO_DO -> TaskStatus.PROGRESS
-        PROGRESS -> TaskStatus.DONE
+        TO_DO -> TaskStatus.IN_PROGRESS
+        IN_PROGRESS -> TaskStatus.DONE
         DONE -> null
     }
 
