@@ -12,4 +12,6 @@ data class TaskFilter(
     val taskTags: Set<String>? = null,
     val sortTaskBy: SortTaskBy,
     val sortTaskOrder: SortTaskOrder,
+    val page: Int,
+    val offset: Int,
 )

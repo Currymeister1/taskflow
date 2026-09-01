@@ -1,32 +1,39 @@
 package com.curry.taskflow.service.impl
 
 import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
+import com.curry.taskflow.api.dto.PagedResponse
 import com.curry.taskflow.api.dto.TaskResponse
-import com.curry.taskflow.api.exception.TaskNotFoundException
 import com.curry.taskflow.dao.entity.TaskEntity
 import com.curry.taskflow.dao.repo.TaskRepository
 import com.curry.taskflow.service.TaskService
-import com.curry.taskflow.service.mapper.toTaskEntity
-import com.curry.taskflow.service.mapper.toTaskResponse
 import com.curry.taskflow.service.domain.TaskFilter
 import com.curry.taskflow.service.domain.TaskResult
-import com.curry.taskflow.service.domain.enums.SortTaskBy
-import com.curry.taskflow.service.domain.enums.SortTaskOrder
 import com.curry.taskflow.service.domain.enums.TaskError
+import com.curry.taskflow.service.mapper.toTaskEntity
+import com.curry.taskflow.service.mapper.toTaskResponse
 import com.curry.taskflow.service.util.normalizeTags
 import org.springframework.stereotype.Service
 
 @Service
 class TaskServiceImpl(private val taskRepository: TaskRepository) : TaskService {
-    override fun getTasks(taskFilter: TaskFilter): List<TaskResponse> {
+    override fun getTasks(taskFilter: TaskFilter): PagedResponse<TaskResponse> {
         val predicates = getPredicates(taskFilter)
 
-        return taskRepository
+         val tasks: List<TaskResponse> = taskRepository
             .findAll()
             .filter { task -> predicates.all { p -> p(task) } }
             .sortedWith(taskFilter.sortTaskBy.comparator)
             .let { taskFilter.sortTaskOrder.order(it) }
             .map { task -> task.toTaskResponse() }
+
+        val pageItems = tasks.drop(taskFilter.page * taskFilter.offset).take(taskFilter.offset)
+
+        return PagedResponse(
+            items = pageItems,
+            page = taskFilter.page,
+            size = taskFilter.offset,
+            totalElements = tasks.size,
+        )
     }
 
     override fun create(createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): TaskResponse =

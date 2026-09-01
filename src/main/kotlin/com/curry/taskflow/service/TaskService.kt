@@ -1,12 +1,13 @@
 package com.curry.taskflow.service
 
 import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
+import com.curry.taskflow.api.dto.PagedResponse
 import com.curry.taskflow.api.dto.TaskResponse
 import com.curry.taskflow.service.domain.TaskFilter
 import com.curry.taskflow.service.domain.TaskResult
 
 interface TaskService {
-    fun getTasks(taskFilter: TaskFilter): List<TaskResponse>
+    fun getTasks(taskFilter: TaskFilter): PagedResponse<TaskResponse>
     fun create(createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): TaskResponse
     fun update(taskId: Long, createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): TaskResult
     fun delete(taskId: Long)

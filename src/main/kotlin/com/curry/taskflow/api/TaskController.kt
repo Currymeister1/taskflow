@@ -1,6 +1,7 @@
 package com.curry.taskflow.api
 
 import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
+import com.curry.taskflow.api.dto.PagedResponse
 import com.curry.taskflow.api.dto.TaskResponse
 import com.curry.taskflow.service.domain.enums.TaskPriority
 import com.curry.taskflow.service.domain.enums.TaskStatus
@@ -37,8 +38,10 @@ class TaskController(private val taskService: TaskService) {
         @RequestParam("tags", required = false) tags: Set<String>?,
         @RequestParam("sortBy", defaultValue = "CREATED_AT") sortBy: SortTaskBy,
         @RequestParam("direction", defaultValue = "DESC") direction: SortTaskOrder,
+        @RequestParam("page", required = false) page: Int?,
+        @RequestParam("size", required = false) size: Int?,
     ):
-            ResponseEntity<List<TaskResponse>> =
+            ResponseEntity<PagedResponse<TaskResponse>> =
         ResponseEntity.ok(
             taskService.getTasks(
                 TaskFilter(
@@ -48,6 +51,8 @@ class TaskController(private val taskService: TaskService) {
                     taskTags = tags,
                     sortTaskBy = sortBy,
                     sortTaskOrder = direction,
+                    page = page ?: 0,
+                    offset = size ?: 10,
                 ),
             )
         )
@@ -55,9 +60,9 @@ class TaskController(private val taskService: TaskService) {
 
     @GetMapping("/{id}")
     fun getTaskById(@PathVariable id: Long): ResponseEntity<TaskResponse> =
-        when(val taskResult = taskService.getTaskById(id)) {
+        when (val taskResult = taskService.getTaskById(id)) {
             is TaskResult.Success -> ResponseEntity.ok(taskResult.taskResponse)
-            is TaskResult.Failure -> when(taskResult.reason) {
+            is TaskResult.Failure -> when (taskResult.reason) {
                 TaskError.NOT_FOUND -> ResponseEntity.notFound().build()
                 else -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
             }
