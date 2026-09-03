@@ -64,7 +64,6 @@ class TaskController(private val taskService: TaskService) {
             is TaskResult.Success -> ResponseEntity.ok(taskResult.taskResponse)
             is TaskResult.Failure -> when (taskResult.reason) {
                 TaskError.NOT_FOUND -> ResponseEntity.notFound().build()
-                else -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
             }
         }
 
