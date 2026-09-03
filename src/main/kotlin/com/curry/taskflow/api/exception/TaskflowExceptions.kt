@@ -1,5 +1,6 @@
 package com.curry.taskflow.api.exception
 
+@Deprecated("Switched to sealed class based result")
 class TaskNotFoundException(
     message: String,
 ) : RuntimeException(message)

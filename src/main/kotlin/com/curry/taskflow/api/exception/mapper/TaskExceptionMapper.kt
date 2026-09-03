@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 class TaskExceptionMapper {
 
     @ExceptionHandler(TaskNotFoundException::class)
+    @Deprecated("Switched to sealed class based result")
     fun handleTaskNotFoundException(ex: TaskNotFoundException):
             ResponseEntity<ErrorMessageModel> = ResponseEntity(
         ErrorMessageModel(
