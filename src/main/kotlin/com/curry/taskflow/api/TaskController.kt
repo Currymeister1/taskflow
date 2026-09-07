@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -71,7 +72,7 @@ class TaskController(private val taskService: TaskService) {
     fun createTask(@RequestBody @Valid createOrUpdateTaskRequest: CreateOrUpdateTaskRequest): ResponseEntity<TaskResponse> =
         ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(createOrUpdateTaskRequest))
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     fun updateTask(
         @PathVariable("id") id: Long,
         @RequestBody @Valid updateTaskRequest: CreateOrUpdateTaskRequest,
