@@ -30,6 +30,6 @@ class TaskEntity (
     @Column(name = "tag")
     var tags: Set<String> = mutableSetOf(),
 
-    @Column(nullable = true)
+    @Column(name="due_date", nullable = true)
     var dueDate: LocalDate? = null,
 ) : DateAudit()

@@ -14,14 +14,17 @@ data class CreateOrUpdateTaskRequest(
     val status: TaskStatus = TaskStatus.TO_DO,
     val priority: TaskPriority = TaskPriority.MEDIUM,
     val tags: Set<String>? = null,
+    val dueDate: LocalDate? = null,
 )
 
 data class TaskResponse(
     val id: Long? = null,
     val title: String,
     val description: String? = null,
-    val status: TaskStatus,
-    val priority: TaskPriority,
+    val status: String,
+    val priority: String,
     val createdAt: LocalDate,
     val tags: Set<String>? = null,
+    val dueDate: LocalDate? = null,
+    val isActionable: Boolean = false,
 )

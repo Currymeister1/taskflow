@@ -5,6 +5,7 @@ import com.curry.taskflow.dao.repo.TaskRepository
 import com.curry.taskflow.service.TaskStatsService
 import com.curry.taskflow.service.domain.enums.TaskPriority
 import com.curry.taskflow.service.domain.enums.TaskStatus
+import com.curry.taskflow.service.util.isOverDue
 import com.curry.taskflow.service.util.weight
 import org.springframework.stereotype.Service
 
@@ -22,10 +23,15 @@ class TaskStatsServiceImpl(private val taskRepository: TaskRepository) : TaskSta
     override fun getTaskWorkload(): TaskWorkloadStatResponse {
         val uncompletedTasks = taskRepository
             .findTaskEntitiesByStatusNot(TaskStatus.DONE.value)
+        val overDueTasks = taskRepository
+            .findTaskEntitiesByStatusIn(listOf(TaskStatus.TO_DO.value, TaskStatus.IN_PROGRESS.value))
+            .filter { it.isOverDue() }
+
 
         return TaskWorkloadStatResponse(
             workloadScore = uncompletedTasks.sumOf { taskEntity -> TaskPriority.fromValue(taskEntity.priority).weight() },
-            activeTaskCount = uncompletedTasks.size
+            activeTaskCount = uncompletedTasks.size,
+            overDueTasksCount = overDueTasks.size,
         )
     }
 }
