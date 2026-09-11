@@ -15,12 +15,6 @@ fun RegisterUserRequest.toUserEntity(): UserEntity {
     )
 }
 
-class ErrorMessageModel(
-    val status: Int? = null,
-    val message: String? = null,
-    val errors: Map<String, String>? = null,
-)
-
 fun AuthRegisterError.toErrorResponse(): ResponseEntity<Any> =
     when (this) {
         AuthRegisterError.EMAIL_ALREADY_REGISTERED -> ResponseEntity.status(HttpStatus.CONFLICT).body(
@@ -30,3 +24,9 @@ fun AuthRegisterError.toErrorResponse(): ResponseEntity<Any> =
             ErrorMessageModel(HttpStatus.BAD_REQUEST.value(), errorDescription)
         )
     }
+
+class ErrorMessageModel(
+    val status: Int? = null,
+    val message: String? = null,
+    val errors: Map<String, String>? = null,
+)
