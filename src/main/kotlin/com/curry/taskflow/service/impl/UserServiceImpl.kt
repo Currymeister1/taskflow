@@ -8,11 +8,13 @@ import com.curry.taskflow.service.domain.result.AuthRegisterResult
 import com.curry.taskflow.service.mapper.toUserEntity
 import org.hibernate.exception.ConstraintViolationException
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder
 ) : UserService {
     private val passwordRegex = Regex("^.{12,}$")
 

@@ -6,11 +6,12 @@ import com.curry.taskflow.service.domain.enums.UserRole
 import com.curry.taskflow.service.domain.result.AuthRegisterError
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.crypto.password.PasswordEncoder
 
-fun RegisterUserRequest.toUserEntity(): UserEntity {
+fun RegisterUserRequest.toUserEntity(encoder: PasswordEncoder): UserEntity {
     return UserEntity(
         email = this.email,
-        hashedPassword = this.password,
+        hashedPassword = encoder.encode(this.password) ?: throw RuntimeException("Encoding failed"),
         roles = setOf(UserRole.USER)
     )
 }
