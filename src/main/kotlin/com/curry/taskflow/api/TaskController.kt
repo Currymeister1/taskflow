@@ -7,7 +7,7 @@ import com.curry.taskflow.service.domain.enums.TaskPriority
 import com.curry.taskflow.service.domain.enums.TaskStatus
 import com.curry.taskflow.service.TaskService
 import com.curry.taskflow.service.domain.TaskFilter
-import com.curry.taskflow.service.domain.TaskResult
+import com.curry.taskflow.service.domain.result.TaskResult
 import com.curry.taskflow.service.domain.enums.SortTaskBy
 import com.curry.taskflow.service.domain.enums.SortTaskOrder
 import com.curry.taskflow.service.domain.enums.TaskError
@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping

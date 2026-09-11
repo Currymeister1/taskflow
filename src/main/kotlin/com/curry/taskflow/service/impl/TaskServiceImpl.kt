@@ -7,7 +7,7 @@ import com.curry.taskflow.dao.entity.TaskEntity
 import com.curry.taskflow.dao.repo.TaskRepository
 import com.curry.taskflow.service.TaskService
 import com.curry.taskflow.service.domain.TaskFilter
-import com.curry.taskflow.service.domain.TaskResult
+import com.curry.taskflow.service.domain.result.TaskResult
 import com.curry.taskflow.service.domain.enums.TaskError
 import com.curry.taskflow.service.mapper.toTaskEntity
 import com.curry.taskflow.service.mapper.toTaskResponse

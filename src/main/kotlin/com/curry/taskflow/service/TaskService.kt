@@ -4,7 +4,7 @@ import com.curry.taskflow.api.dto.CreateOrUpdateTaskRequest
 import com.curry.taskflow.api.dto.PagedResponse
 import com.curry.taskflow.api.dto.TaskResponse
 import com.curry.taskflow.service.domain.TaskFilter
-import com.curry.taskflow.service.domain.TaskResult
+import com.curry.taskflow.service.domain.result.TaskResult
 
 interface TaskService {
     fun getTasks(taskFilter: TaskFilter): PagedResponse<TaskResponse>
